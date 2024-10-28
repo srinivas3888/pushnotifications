@@ -28,7 +28,7 @@ app.post('/subscribe', (req, res) => {
 });
 
 // Endpoint to send a push notification manually
-app.post('/send-notification', (req, res) => {
+app.get('/send-notification', (req, res) => {
     const notificationPayload = JSON.stringify({
         title: 'Hello from Srinivas!',
         body: 'You have a new message.'
