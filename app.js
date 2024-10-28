@@ -46,6 +46,10 @@ app.post('/send-notification', (req, res) => {
         });
 });
 
+app.get('/', (req, res)=>{
+    res.status(200).json({'status':'Success', 'details':'HOME page'})
+})
+
 app.listen(PORT, () => {
     console.log(`Server running on port http://localhost:${ PORT }/`);
 });
