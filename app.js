@@ -1,9 +1,18 @@
 const express = require('express');
 const webpush = require('web-push');
 const dotenv = require('dotenv').config('./config.env');
+const cors = require('cors');
 
 const app = express();
 const PORT = 3000;
+
+let corsOptions = {
+    origin: '*',
+    methods: ['*'],
+    allowedHeaders: ['*'],
+    credentials: true
+};
+app.use(cors(corsOptions));
 
 // let v=webpush.generateVAPIDKeys();
 
@@ -28,7 +37,7 @@ app.post('/subscribe', (req, res) => {
 });
 
 // Endpoint to send a push notification manually
-app.post('/send-notification', (req, res) => {
+app.get('/send-notification', (req, res) => {
     const notificationPayload = JSON.stringify({
         title: 'Hello from Srinivas!',
         body: 'You have a new message.'
