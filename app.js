@@ -24,37 +24,28 @@ webpush.setVapidDetails('mailto:srinivasb.temp@gmail.com', publicVapidKey, priva
 
 app.use(express.json());
 
-let subscriptions = [];
 
 // Endpoint to handle subscription from the frontend
 app.post('/subscribe', (req, res) => {
     const subscription = req.body;
 
-    // Add the subscription object to the list
-    subscriptions.push(subscription);
-
-    res.status(201).json({ message: 'Subscription received' });
-});
-
-// Endpoint to send a push notification manually
-app.get('/send-notification', (req, res) => {
     const notificationPayload = JSON.stringify({
         title: 'Hello from Srinivas!',
         body: 'You have a new message.'
     });
 
-    const promises = subscriptions.map(subscription =>
-        webpush.sendNotification(subscription, notificationPayload)
-    );
-
-    Promise.all(promises)
-        .then(() => res.status(200).json({ message: 'Notifications sent' }))
-        .catch(err => {
-            console.error('Error sending notification:', err);
-            res.sendStatus(500);
-        });
+    try{
+    webpush.sendNotification(subscription, notificationPayload);
+    console.log("Notification sent...")
+    res.status(201).json({ 'status': "Success in sending Notification" ,'message': "Subscription received and Notification sent..." })
+    }
+    catch(err){
+        console.log("Error while sending Notification : "+err);
+        res.status(500).json({ 'status': "Failed in sending Notification" ,'message': err });
+    }
 });
 
+//Test route
 app.get('/', (req, res)=>{
     res.status(200).json({'status':'Success', 'details':'HOME page'})
 })
