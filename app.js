@@ -24,20 +24,26 @@ webpush.setVapidDetails('mailto:srinivasb.temp@gmail.com', publicVapidKey, priva
 
 app.use(express.json());
 
+let subscriptions=[];
 
 // Endpoint to handle subscription from the frontend
 app.post('/subscribe', (req, res) => {
     const subscription = req.body;
+    subscriptions.push(subscription);
 
     const notificationPayload = JSON.stringify({
         title: 'Hello from Srinivas!',
-        body: 'You have a new message.'
+        body: 'You have a new message.',
+        icon: '/fav.png',
+        badge: '/fav.png'
     });
 
     try{
-    webpush.sendNotification(subscription, notificationPayload);
-    console.log("Notification sent...")
-    res.status(201).json({ 'status': "Success in sending Notification" ,'message': "Subscription received and Notification sent..." })
+        for(let i=0; i<subscriptions.length; i++){
+            webpush.sendNotification(subscriptions[i], notificationPayload);
+        }
+        console.log("Notifications sent to... "+subscriptions)
+        res.status(201).json({ 'status': "Success in sending Notification" ,'message': "Subscription received and Notification sent..." })
     }
     catch(err){
         console.log("Error while sending Notification : "+err);
